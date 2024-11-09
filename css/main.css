@@ -2239,3 +2239,11 @@ input[type=checkbox] {
     margin-left: 1rem;
   }
 }
+.heimu {
+  background-color: #000;
+  color: #000;
+  transition: color 0.3s ease;
+}
+.heimu:hover {
+  color: #fff;
+}
