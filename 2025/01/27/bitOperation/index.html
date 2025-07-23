@@ -1,0 +1,1095 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/CitCup.png">
+  <link rel="icon" href="/img/GitCup.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Xizhen Luo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="本文将介绍一些位运算的奇技淫巧，并且作为基础知识对整数在计算机中的表示原理作简要补充。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="位运算技巧">
+<meta property="og:url" content="https://xizhenluo.github.io/2025/01/27/bitOperation/index.html">
+<meta property="og:site_name" content="GitCup">
+<meta property="og:description" content="本文将介绍一些位运算的奇技淫巧，并且作为基础知识对整数在计算机中的表示原理作简要补充。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-01-27T07:07:33.000Z">
+<meta property="article:modified_time" content="2025-03-20T08:06:45.717Z">
+<meta property="article:author" content="Xizhen Luo">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>位运算技巧 - GitCup</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"xizhenluo.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>GitCup</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>Links</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="位运算技巧"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-01-27 15:07" pubdate>
+          January 27, 2025 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.8k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          15 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">位运算技巧</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>本文将介绍一些位运算的奇技淫巧，并且作为基础知识对整数在计算机中的表示原理作简要补充。<br />
+<span id="more"></span> 位运算是对二进制位进行直接操作的运算，在某些特定场景下<span
+class="heimu">做LeetCode中某些刁钻怪题时</span>具有优化代码性能等奇效，但会降低代码可读性。</p>
+<h2 id="part-1-有符号整数在计算机中的存储">Part 1
+有符号整数在计算机中的存储<br />
+</h2>
+<p>java中的整数是4字节（32bit）的有符号整数，也就是说每个整数都是用一串长度为32的01串表示的。所以，理论上一共可以表示
+<span class="math inline">\(2^{32}\)</span> 个数。<br />
+为了区分正整数和负整数，使用最高位作为符号位，符号位0表示正数，为1表示负数。<br />
+</p>
+<h3 id="原码">原码<br />
+</h3>
+<p>原码是最高位符号位与剩余31位构成的，剩余的31位用来表示整数的绝对值。因此，原码可以表示的范围为：<span
+class="math inline">\(-2^{31}+1 \sim 2^{31}-1\)</span>
+，其中真值0拥有[00000000 00000000 00000000 00000000]与[10000000 00000000
+00000000 00000000]两种表示。<br />
+</p>
+<h3 id="反码">反码<br />
+</h3>
+<p>对于正数，其反码就是原码本身；<br />
+对于负数，其反码是保持符号位不变，而把原码剩余位全部取反得到的。无法从负数的反码直接得出其表示的值。<br />
+<div class="note note-info">
+            <p><strong>原码与反码的互相转换</strong><br />1. 首先看符号位，如果符号位为0，则原码和反码完全相同；<br />2.如果符号位为1，则只需把其余位全部取反即可完成原码和反码互相转换。<br /></p>
+          </div></p>
+<h3 id="补码">补码<br />
+</h3>
+<p>对于正数，其补码就是原码本身；<br />
+对于负数，其补码就是把反码加一得到的（符号位也应该参与进位）。无法从负数的补码直接得出其表示的值。<br />
+补码能够表示的范围比原码更广，包括 <span
+class="math inline">\(2^{31}\)</span> 个负数和 <span
+class="math inline">\(2^{31}\)</span> 个非负数，表示范围为 <span
+class="math inline">\(-2^{31} \sim 2^{31}-1\)</span> 。<br />
+<div class="note note-info">
+            <p><strong>原码与补码的互相转换</strong><br />1. 首先看符号位，如果符号位为0，则原码和补码完全相同；<br />2.如果符号位为1，则保持符号位不变，而把剩余位数全部取反后，整体加一。<br /></p>
+          </div> <div class="note note-warning">
+            <p><strong>负数补码的性质</strong><br />原码通过符号位不变、剩余位取反后整体加一的操作可以得到补码；补码通过相同操作后也能还原出原码。</p>
+          </div></p>
+<h2 id="part-2-进制">Part 2 进制</h2>
+<h3 id="二进制与二幂进制的转换">二进制与二幂进制的转换</h3>
+二幂进制（4进制、8进制、16进制等等）可以与二进制表示之间直接转换，而无需借助10进制辅助中转。<br />
+以二进制与16进制转换为例，由于 <span
+class="math inline">\(16=2^{4}\)</span>，因此二进制表示中从右往左每4个二进制位就确定了一个16进制位。16进制位与2进制位之间的转换关系如表所示：<br />
+
+<table align="center">
+<caption>
+2进制与16进制的转换关系
+</caption>
+<thead>
+<tr>
+<th>
+10进制
+</th>
+<th>
+2进制
+</th>
+<th>
+16进制
+</th>
+<th>
+10进制
+</th>
+<th>
+2进制
+</th>
+<th>
+16进制
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>
+0
+</th>
+<th>
+0000
+</th>
+<th>
+0
+</th>
+<th>
+8
+</th>
+<th>
+1000
+</th>
+<th>
+8
+</th>
+</tr>
+<tr>
+<th>
+1
+</th>
+<th>
+0001
+</th>
+<th>
+1
+</th>
+<th>
+9
+</th>
+<th>
+1001
+</th>
+<th>
+9
+</th>
+</tr>
+<tr>
+<th>
+2
+</th>
+<th>
+0010
+</th>
+<th>
+2
+</th>
+<th>
+10
+</th>
+<th>
+1010
+</th>
+<th>
+a
+</th>
+</tr>
+<tr>
+<th>
+3
+</th>
+<th>
+0011
+</th>
+<th>
+3
+</th>
+<th>
+11
+</th>
+<th>
+1011
+</th>
+<th>
+b
+</th>
+</tr>
+<tr>
+<th>
+4
+</th>
+<th>
+0100
+</th>
+<th>
+4
+</th>
+<th>
+12
+</th>
+<th>
+1100
+</th>
+<th>
+c
+</th>
+</tr>
+<tr>
+<th>
+5
+</th>
+<th>
+0101
+</th>
+<th>
+5
+</th>
+<th>
+13
+</th>
+<th>
+1101
+</th>
+<th>
+d
+</th>
+</tr>
+<tr>
+<th>
+6
+</th>
+<th>
+0110
+</th>
+<th>
+6
+</th>
+<th>
+14
+</th>
+<th>
+1110
+</th>
+<th>
+e
+</th>
+</tr>
+<tr>
+<th>
+7
+</th>
+<th>
+0111
+</th>
+<th>
+7
+</th>
+<th>
+15
+</th>
+<th>
+1111
+</th>
+<th>
+f
+</th>
+</tr>
+</tbody>
+</table>
+<h2 id="part-3-基本位运算">Part 3 基本位运算</h2>
+<h3 id="位与">位与<br />
+</h3>
+<p>当且仅当两个数都为1时，位与才返回1。<br />
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-number">0</span> &amp; <span class="hljs-number">0</span> = <span class="hljs-number">0</span>;<br><span class="hljs-number">0</span> &amp; <span class="hljs-number">1</span> = <span class="hljs-number">0</span>;<br><span class="hljs-number">1</span> &amp; <span class="hljs-number">0</span> = <span class="hljs-number">0</span>;<br><span class="hljs-number">1</span> &amp; <span class="hljs-number">1</span> = <span class="hljs-number">1</span>;<br></code></pre></td></tr></table></figure> 位与满足交换律与结合律。<br />
+</p>
+<h3 id="位或">位或<br />
+</h3>
+<p>只要两个数中存在一个为1，位或就返回1。<br />
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-number">0</span> | <span class="hljs-number">0</span> = <span class="hljs-number">0</span>;<br><span class="hljs-number">0</span> | <span class="hljs-number">1</span> = <span class="hljs-number">1</span>;<br><span class="hljs-number">1</span> | <span class="hljs-number">0</span> = <span class="hljs-number">1</span>;<br><span class="hljs-number">1</span> | <span class="hljs-number">1</span> = <span class="hljs-number">1</span>;<br></code></pre></td></tr></table></figure> 位或满足交换律与结合律。<br />
+</p>
+<h3 id="按位取反">按位取反<br />
+</h3>
+<p>0被修改成1，1被修改成0。<br />
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">~<span class="hljs-number">0</span> = <span class="hljs-number">1</span>;<br>~<span class="hljs-number">1</span> = <span class="hljs-number">0</span>;<br></code></pre></td></tr></table></figure></p>
+<h3 id="位异或">位异或<br />
+</h3>
+<p>两个数相同时返回0，不同时返回1。<br />
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-number">0</span> ^ <span class="hljs-number">0</span> = <span class="hljs-number">0</span>;<br><span class="hljs-number">0</span> ^ <span class="hljs-number">1</span> = <span class="hljs-number">1</span>;<br><span class="hljs-number">1</span> ^ <span class="hljs-number">0</span> = <span class="hljs-number">1</span>;<br><span class="hljs-number">1</span> ^ <span class="hljs-number">1</span> = <span class="hljs-number">0</span>;<br></code></pre></td></tr></table></figure> 位异或满足交换律与结合律，此外还满足两条性质：<br />
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">a ^ a = <span class="hljs-number">0</span>;<br>a ^ <span class="hljs-number">0</span> = a;<br><span class="hljs-number">0</span> ^ a = a;<br></code></pre></td></tr></table></figure></p>
+<h3 id="移位">移位<br />
+</h3>
+<ul>
+<li>左移i位：把二进制表示向左移动i位（符号位也会移动），最低位用0补齐，最高位有可能溢出丢失从而导致符号发生改变。每向左移动1位，相当于对原数进行乘以2操作。<br />
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">a &lt;&lt; i;<br></code></pre></td></tr></table></figure> 【示例】正数左移4位<br />
+before: 013 = [<strong>0000</strong>0000 00000000 00000000
+00001101]<br />
+after : 208 = [00000000 00000000 00000000
+1101<strong>0000</strong>]<br />
+【示例】负数左移4位<br />
+before: -013 = [<strong>1111</strong>1111 11111111 11111111
+11110011]<br />
+after : -208 = [11111111 11111111 11111111
+0011<strong>0000</strong>]<br />
+</li>
+<li>右移i位：把二进制表示向右移动i位（符号位也会移动），最高位用原数的符号位补齐，最低位有可能溢出丢失。每向右移动1位，相当于对原数进行整除2操作。<br />
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">a &gt;&gt; i;<br></code></pre></td></tr></table></figure> 【示例】正数右移4位<br />
+before: 477 = [00000000 00000000 00000001
+1101<strong>1101</strong>]<br />
+after : 029 = [<strong>0000</strong>0000 00000000 00000000
+00011101]<br />
+【示例】负数右移4位<br />
+before: -477 = [11111111 11111111 11111110
+0010<strong>0011</strong>]<br />
+after : -030 = [<strong>1111</strong>1111 11111111 11111111
+11100010]<br />
+</li>
+<li>无符号右移i位：把二进制表示向右移动i位（符号位也会移动），最高位用一律用0补齐，最低位有可能溢出丢失。所得结果必然是正数。<br />
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">a &gt;&gt;&gt; i;<br></code></pre></td></tr></table></figure> 【示例】正数无符号右移4位<br />
+before: 477 = [00000000 00000000 00000001
+1101<strong>1101</strong>]<br />
+after : 029 = [<strong>0000</strong>0000 00000000 00000000
+00011101]<br />
+【示例】负数无符号右移4位<br />
+before: -00000477 = [11111111 11111111 11111110
+0010<strong>0011</strong>]<br />
+after : 268435426 = [<strong>0000</strong>1111 11111111 11111111
+11100010]<br />
+</li>
+</ul>
+<h2 id="part-4-位运算的使用技巧">Part 4 位运算的使用技巧</h2>
+<h3 id="基本使用">基本使用<br />
+</h3>
+<ul>
+<li>原地交换整数变量<br />
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">a ^= b; b ^= a; a ^= b;<br></code></pre></td></tr></table></figure></li>
+<li>整数判等<br />
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">a ^ b == <span class="hljs-number">0</span>; <span class="hljs-comment">// 相同为true，不同为false</span><br></code></pre></td></tr></table></figure></li>
+<li>取相反数<br />
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">~a + <span class="hljs-number">1</span><br></code></pre></td></tr></table></figure> 【示例】求相反数：<br />
+before: 05 = [00000000 00000000 00000000 00000101]<br />
+after : -5 = [11111111 11111111 11111111 11111011]</li>
+</ul>
+<h3 id="修改从右往左某一位的状态">修改从右往左某一位的状态<br />
+</h3>
+<ul>
+<li>把从右往左第i + 1位置为1<br />
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">a |= (<span class="hljs-number">1</span> &lt;&lt; i);<br></code></pre></td></tr></table></figure> 【示例】把第6位置为1：<br />
+before: 05 = [00000000 00000000 00000000
+00<strong>0</strong>00101]<br />
+after : 37 = [00000000 00000000 00000000
+00<strong>1</strong>00101]<br />
+</li>
+<li>把从右往左第i + 1位置为0<br />
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">a &amp;= ~(<span class="hljs-number">1</span> &lt;&lt; i);<br></code></pre></td></tr></table></figure> 【示例】把第4位置为0：<br />
+before: 47 = [00000000 00000000 00000000
+0010<strong>1</strong>111]<br />
+after : 39 = [00000000 00000000 00000000
+0010<strong>0</strong>111]<br />
+</li>
+<li>把从右往左第i + 1位取反<br />
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">a ^= (<span class="hljs-number">1</span> &lt;&lt; i);<br></code></pre></td></tr></table></figure> 【示例】把第5位取反：<br />
+before: 47 = [00000000 00000000 00000000
+001<strong>0</strong>1111]<br />
+after : 63 = [00000000 00000000 00000000
+001<strong>1</strong>1111]<br />
+</li>
+</ul>
+<h3 id="获取从右往左某一位的状态">获取从右往左某一位的状态<br />
+</h3>
+<ul>
+<li>获取从右往左第i + 1位的状态<br />
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">a &amp; (<span class="hljs-number">1</span> &lt;&lt; i);<br></code></pre></td></tr></table></figure></li>
+<li>判断奇偶性（获取右边第一位的状态）<br />
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">a &amp; <span class="hljs-number">1</span> == <span class="hljs-number">0</span>; <span class="hljs-comment">// 奇数为false，偶数为true</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3
+id="修改二进制表示中最后一个1的状态">修改二进制表示中最后一个1的状态<br />
+</h3>
+<ul>
+<li>把二进制表示中最后的1置0<br />
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">a &amp; (a - <span class="hljs-number">1</span>);<br></code></pre></td></tr></table></figure> 【示例】把最后一个1变为0<br />
+before: 88 = [00000000 00000000 00000000
+0101<strong>1</strong>000]<br />
+after : 80 = [00000000 00000000 00000000
+0101<strong>0</strong>000]<br />
+</li>
+<li>判断2的幂（把唯一的1删除）<br />
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">a &gt; <span class="hljs-number">0</span> &amp;&amp; (a &amp; (a - <span class="hljs-number">1</span>)) == <span class="hljs-number">0</span>;<br></code></pre></td></tr></table></figure> 【示例】2的幂处理后变为0：<br />
+before: 128 = [00000000 00000000 0000000<strong>1</strong>
+0000000]<br />
+after : 000 = [00000000 00000000 0000000<strong>0</strong>
+0000000]<br />
+</li>
+<li>仅保留二进制表示中的最后一个1<br />
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">a &amp; -a<br></code></pre></td></tr></table></figure> 【示例】保留最后一个1：<br />
+before: 88 = [00000000 00000000 00000000
+0101<strong>1</strong>000]<br />
+after : 08 = [00000000 00000000 00000000
+0000<strong>1</strong>000]<br />
+</li>
+</ul>
+<h3
+id="修改二进制表示中的最后几位的状态">修改二进制表示中的最后几位的状态<br />
+</h3>
+<ul>
+<li>仅保留最后的i位<br />
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">a &amp; ((<span class="hljs-number">1</span> &lt;&lt; i) - <span class="hljs-number">1</span>);<br></code></pre></td></tr></table></figure> 【示例】仅保留最后的3位：<br />
+before: 63 = [00000000 00000000 00000000
+00111<strong>111</strong>]<br />
+after : 07 = [00000000 00000000 00000000
+00000<strong>111</strong>]<br />
+</li>
+<li>把最后的i位全部置0<br />
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">a &amp; ~((<span class="hljs-number">1</span> &lt;&lt; i) - <span class="hljs-number">1</span>);<br></code></pre></td></tr></table></figure> 【示例】把最后的3位置为0：<br />
+before: 63 = [00000000 00000000 00000000
+00111<strong>111</strong>]<br />
+after : 56 = [00000000 00000000 00000000
+00111<strong>000</strong>]<br />
+</li>
+</ul>
+<h2 id="part-5-位运算实现整数加法">Part 5 位运算实现整数加法</h2>
+<p>通过单纯的位运算能够在不使用+、-运算符的情况下实现整数加法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getSum</span><span class="hljs-params">(<span class="hljs-type">int</span> a, <span class="hljs-type">int</span> b)</span> &#123;<br>    <span class="hljs-keyword">if</span> (b == <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> a;<br><br>    <span class="hljs-type">int</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> a ^ b;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">carry</span> <span class="hljs-operator">=</span> (a &amp; b) &lt;&lt; <span class="hljs-number">1</span>;<br><br>    <span class="hljs-keyword">return</span> getSum(result, carry);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>通过对a和b进行按位与，获得a与b的无进位加和；而通过对a和b进行按位异或，获得a与b相加的进位情况，再向左移动一位。把无进位加和与进位情况分别视作新的被加数与加数，重复以上过程，直到进位为0。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/technowledge/" class="category-chain-item">technowledge</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Java/" class="print-no-link">#Java</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>位运算技巧</div>
+      <div>https://xizhenluo.github.io/2025/01/27/bitOperation/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Xizhen Luo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>January 27, 2025</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/07/22/%E5%9C%A8SpringBoot%E4%B8%AD%E8%AE%BE%E7%BD%AE%E7%BB%9F%E4%B8%80%E7%BB%93%E6%9E%9C%E8%BF%94%E5%9B%9E%E6%A0%BC%E5%BC%8F/" title="在SpringBoot中设置统一结果返回格式">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">在SpringBoot中设置统一结果返回格式</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/01/26/dictionaryTree/" title="树形结构系列——字典树（前缀树）">
+                        <span class="hidden-mobile">树形结构系列——字典树（前缀树）</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

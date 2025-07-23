@@ -1,0 +1,708 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/CitCup.png">
+  <link rel="icon" href="/img/GitCup.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Xizhen Luo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="字典树（亦称作前缀树、Trie树）是一种用于存储、查找字符串以及查找字符串前缀的树形结构，本质上是一种哈希树。采用空间换时间策略，利用公共前缀来节约存储空间，使得字符串存储和查找的效率优化至O(k)，其中k为字符串的长度。可以用于自动补全、关键词搜索、IP路由等功能。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="树形结构系列——字典树（前缀树）">
+<meta property="og:url" content="https://xizhenluo.github.io/2025/01/26/dictionaryTree/index.html">
+<meta property="og:site_name" content="GitCup">
+<meta property="og:description" content="字典树（亦称作前缀树、Trie树）是一种用于存储、查找字符串以及查找字符串前缀的树形结构，本质上是一种哈希树。采用空间换时间策略，利用公共前缀来节约存储空间，使得字符串存储和查找的效率优化至O(k)，其中k为字符串的长度。可以用于自动补全、关键词搜索、IP路由等功能。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-01-26T13:02:36.000Z">
+<meta property="article:modified_time" content="2025-04-06T07:26:54.993Z">
+<meta property="article:author" content="Xizhen Luo">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="高级数据结构">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>树形结构系列——字典树（前缀树） - GitCup</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"xizhenluo.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>GitCup</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>Links</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="树形结构系列——字典树（前缀树）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-01-26 21:02" pubdate>
+          January 26, 2025 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.8k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          15 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">树形结构系列——字典树（前缀树）</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>字典树（亦称作前缀树、Trie树）是一种用于存储、查找字符串以及查找字符串前缀的树形结构，本质上是一种哈希树。采用空间换时间策略，利用公共前缀来节约存储空间，使得字符串存储和查找的效率优化至O(k)，其中k为字符串的长度。可以用于自动补全、关键词搜索、IP路由等功能。
+<span id="more"></span></p>
+<h2 id="字典树的成员变量">字典树的成员变量</h2>
+<ul>
+<li><code>Trie[]</code>类型的<code>children</code>变量记录该节点字符的后继字符，对于全大写或全小写的纯英文字符，该数组下标0~25代表a~z。也就是说字典树是一棵“26叉树”。</li>
+<li><code>boolean</code>类型的<code>isEnd</code>变量用于标记该节点是否被作为某个字符串的结尾。</li>
+<li><code>int</code>类型的<code>wordCount</code>变量记录以该前缀开头的单词数目。</li>
+<li><code>Trie</code>类型的<code>parent</code>变量记录当前节点的父节点。</li>
+</ul>
+<h2 id="字典树的成员方法">字典树的成员方法</h2>
+<h3 id="公有方法">公有方法</h3>
+<ul>
+<li>无参构造器 <code>Trie()</code></li>
+<li>插入单词 <code>void insert(String word)</code></li>
+<li>查找单词 <code>boolean search(String word)</code></li>
+<li>查找前缀 <code>boolean startsWith(String prefix)</code></li>
+<li>删除单词 <code>void remove(String word)</code></li>
+<li>获取以某个前缀开头的所有单词
+<code>List&lt;String&gt; getWordsStartWith(String prefix)</code></li>
+<li>获取以某个前缀开头的单词数目
+<code>int numberOfStartWith(String prefix)</code></li>
+</ul>
+<h3 id="私有方法">私有方法</h3>
+<ul>
+<li>获取字符串的最后一个节点
+<code>Trie getPrefix(String prefix)</code></li>
+<li>深度优先搜索
+<code>void backtracking(Trie node, List&lt;String&gt; res, StringBuilder path)</code></li>
+<li>判断叶子节点（孩子是否全空）
+<code>boolean isEmpty(Trie[] children)</code></li>
+</ul>
+<h2 id="代码实现">代码实现</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Trie</span> &#123;<br>    Trie[] children;<br>    <span class="hljs-type">boolean</span> isEnd;<br>    <span class="hljs-type">int</span> wordCount;<br>    Trie parent;<br><br>    <span class="hljs-comment">/* 公有无参构造器，</span><br><span class="hljs-comment">     * 以全小写纯英文字符串字典树为例，每个节点的下方有26个孩子，每个孩子也都是一棵字典树</span><br><span class="hljs-comment">    */</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">Trie</span><span class="hljs-params">()</span> &#123;<br>        children = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Trie</span>[<span class="hljs-number">26</span>];<br>        isEnd = <span class="hljs-literal">false</span>;<br>        wordCount = <span class="hljs-number">0</span>;<br>        parent = <span class="hljs-literal">null</span>;<br>    &#125;<br><br>    <span class="hljs-comment">/* void insert方法，向字典树中添加新的单词</span><br><span class="hljs-comment">     * 遍历单词的每一个字母，如果对应节点在字典树中不存在，则添加节点（扩展该节点的子树），并且继续处理下一个节点；如果对应节点在字典树中已存在，则直接处理下一个节点</span><br><span class="hljs-comment">     * 插入完毕后，需要把末尾节点标记为true</span><br><span class="hljs-comment">    */</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">insert</span><span class="hljs-params">(String word)</span> &#123;<br>        <span class="hljs-type">Trie</span> <span class="hljs-variable">node</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">this</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; word.length(); i++) &#123;<br>            <span class="hljs-type">int</span> <span class="hljs-variable">index</span> <span class="hljs-operator">=</span> word.charAt(i) - <span class="hljs-string">&#x27;a&#x27;</span>;<br>            <span class="hljs-keyword">if</span> (node.children[index] == <span class="hljs-literal">null</span>) &#123;<br>                node.children[index] = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Trie</span>();<br>                node.children[index].parent = node;<br>            &#125;<br>            node.wordCount += <span class="hljs-number">1</span>;<br>            node = node.children[index];<br>        &#125;<br>        node.isEnd = <span class="hljs-literal">true</span>;<br>    &#125;<br><br>    <span class="hljs-comment">/* boolean search方法，查找特定单词</span><br><span class="hljs-comment">     * 直接调用辅助方法getPrefix，获取给定单词在字典树中的最后一个节点</span><br><span class="hljs-comment">     * 当且仅当该节点非空（在字典树中存在）并且该节点为true（以该节点结尾）时，才返回true</span><br><span class="hljs-comment">    */</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">search</span><span class="hljs-params">(String word)</span> &#123;<br>        <span class="hljs-type">Trie</span> <span class="hljs-variable">node</span> <span class="hljs-operator">=</span> getPrefix(word);<br>        <span class="hljs-keyword">return</span> node != <span class="hljs-literal">null</span> &amp;&amp; node.isEnd;<br>    &#125;<br><br>    <span class="hljs-comment">/* boolean startsWith方法，查找特定前缀</span><br><span class="hljs-comment">     * 逻辑与查找特定单词基本相同，但由于只需要查找前缀，所以不用关心是否以节点结尾</span><br><span class="hljs-comment">    */</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">startsWith</span><span class="hljs-params">(String prefix)</span> &#123;<br>        <span class="hljs-type">Trie</span> <span class="hljs-variable">node</span> <span class="hljs-operator">=</span> getPrefix(prefix);<br>        <span class="hljs-keyword">return</span> node != <span class="hljs-literal">null</span>;<br>    &#125;<br><br>    <span class="hljs-comment">/* List&lt;Integer&gt; getWordsStartWith方法，获取以特定前缀开头的所有单词列表</span><br><span class="hljs-comment">     * 通过回溯搜索以prefix开头的子树</span><br><span class="hljs-comment">    */</span><br>    <span class="hljs-keyword">public</span> List&lt;String&gt; <span class="hljs-title function_">getWordsStartWith</span><span class="hljs-params">(String prefix)</span> &#123;<br>        <span class="hljs-type">Trie</span> <span class="hljs-variable">node</span> <span class="hljs-operator">=</span> getPrefix(prefix);<br>        List&lt;String&gt; res = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br>        backtracking(node, res, <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringBuilder</span>(prefix));<br>        <span class="hljs-keyword">return</span> res;<br>    &#125;<br><br>    <span class="hljs-comment">/* int numberOfStartWith方法，获取以给定前缀开头的单词数目</span><br><span class="hljs-comment">     * 只要获取该前缀的最后一个节点，直接返回其wordCount值</span><br><span class="hljs-comment">    */</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">numberOfStartWith</span><span class="hljs-params">(String prefix)</span> &#123;<br>        <span class="hljs-type">Trie</span> <span class="hljs-variable">node</span> <span class="hljs-operator">=</span> getPrefix(prefix);<br>        <span class="hljs-keyword">if</span> (node == <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">return</span> node.wordCount;<br>    &#125;<br><br>    <span class="hljs-comment">/* 私有方法 Trie getPrefix，用于返回给定字符串的最后一个节点</span><br><span class="hljs-comment">     * 遍历字符串的每一个字母，如果对应节点在字典树中不存在，则直接返回null；否则继续处理下一个节点</span><br><span class="hljs-comment">     * 遍历结束后返回的node就是给定字符串的最后一个字母在字典树中对应的节点</span><br><span class="hljs-comment">    */</span><br>    <span class="hljs-keyword">private</span> Trie <span class="hljs-title function_">getPrefix</span><span class="hljs-params">(String prefix)</span> &#123;<br>        <span class="hljs-type">Trie</span> <span class="hljs-variable">node</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">this</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; prefix.length(); i++) &#123;<br>            <span class="hljs-type">int</span> <span class="hljs-variable">index</span> <span class="hljs-operator">=</span> prefix.charAt(i) - <span class="hljs-string">&#x27;a&#x27;</span>;<br>            <span class="hljs-keyword">if</span> (node.children[index] == <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>            node = node.children[index];<br>        &#125;<br>        <span class="hljs-keyword">return</span> node;<br>    &#125;<br><br>    <span class="hljs-comment">/* 私有方法 void backtracking，用于针对给定的前缀搜索全部单词</span><br><span class="hljs-comment">    */</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">backtracking</span><span class="hljs-params">(Trie node, List&lt;String&gt; res, StringBuilder path)</span> &#123;<br>        <span class="hljs-keyword">if</span> (node == <span class="hljs-literal">null</span> || isEmpty(node.children)) &#123;<br>            res.add(path.toString());<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; node.children.length; i++) &#123;<br>            <span class="hljs-keyword">if</span> (node.children[i] == <span class="hljs-literal">null</span>) <span class="hljs-keyword">continue</span>;<br>            path.append((<span class="hljs-type">char</span>) (i + <span class="hljs-string">&#x27;a&#x27;</span>));<br>            backtracking(node.children[i], res, path);<br>            path.deleteCharAt(path.length() - <span class="hljs-number">1</span>);<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-comment">/* 私有方法 boolean isEmpty，用于判断节点的孩子是否全空</span><br><span class="hljs-comment">    */</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">isEmpty</span><span class="hljs-params">(Trie[] children)</span> &#123;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; children.length; i++) &#123;<br>            <span class="hljs-keyword">if</span> (children[i] != <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    &#125;<br><br>    <span class="hljs-comment">/* void remove方法，从字典树中删除单词</span><br><span class="hljs-comment">     * 获取给定单词的最后一个节点，如果不存在或者不是单词结尾就结束</span><br><span class="hljs-comment">     * 如果该节点不是叶子，则只要清除结尾标记即可</span><br><span class="hljs-comment">     * 如果该节点是叶子，则往上找到最近的单词结尾，把后续分支直接置空删除即可</span><br><span class="hljs-comment">     * 最后要把从根节点到删除后的节点之间全部节点的计数减一</span><br><span class="hljs-comment">    */</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">remove</span><span class="hljs-params">(String word)</span> &#123;<br>        <span class="hljs-type">Trie</span> <span class="hljs-variable">node</span> <span class="hljs-operator">=</span> getPrefix(word);<br>        <span class="hljs-keyword">if</span> (node == <span class="hljs-literal">null</span> || !node.isEnd) <span class="hljs-keyword">return</span>;<br><br>        <span class="hljs-keyword">if</span> (!isEmpty(node.children)) &#123;<br>            node.isEnd = <span class="hljs-literal">false</span>;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-type">Trie</span> <span class="hljs-variable">pre</span> <span class="hljs-operator">=</span> node;<br>            node = node.parent;<br>            <span class="hljs-keyword">while</span> (node != <span class="hljs-literal">null</span> &amp;&amp; !node.isEnd &amp;&amp; node.wordCount &lt;= <span class="hljs-number">1</span>) &#123;<br>                pre = node;<br>                node = node.parent;<br>            &#125;<br><br>            pre = <span class="hljs-literal">null</span>;<br>        &#125;<br><br>        <span class="hljs-keyword">while</span> (node != <span class="hljs-literal">null</span>) &#123;<br>            node.wordCount -= <span class="hljs-number">1</span>;<br>            node = node.parent;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="字典树的应用">字典树的应用</h2>
+<h3
+id="例题-421.数组中两个数的最大异或值httpsleetcode.cnproblemsmaximum-xor-of-two-numbers-in-an-arraydescriptionenvtypeproblem-list-v2envidhash-table">例题：
+421.数组中两个数的最大异或值（https://leetcode.cn/problems/maximum-xor-of-two-numbers-in-an-array/description/?envType=problem-list-v2&amp;envId=hash-table）</h3>
+<p>给你一个整数数组<code>nums</code>，返回<code>nums[i] XOR nums[j]</code>的最大运算结果，其中<code>0 ≤ i ≤ j &lt; n</code>。</p>
+<p>如果采用两层for循环暴力搜寻会超时，因为做了大量无效搜索。注意到，要使异或值最大，那么就要优先保证二进制高位不相同，所以需要从高位向低位进行比较，这与字典树的比较方式相同。</p>
+<p>为了减小时间复杂度，就要直接获得对于每个元素而言，其他哪个元素与其异或后结果最大，整个数组的最大异或值只能从这些候选值中。为此，可以使用字典树来把时间复杂度降到O(n)。</p>
+<ul>
+<li>首先把数组中所有元素按照二进制位存储在字典树中；</li>
+<li>然后，遍历数组，采用贪心策略，优先选择走当前元素对应位相反的分支（如果存在该分支的话），这样走到叶子节点后得到的路径就是能让该元素异或值最大的数；</li>
+<li>遍历过程中不断更新历史最大异或值。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">findMaximumXOR</span><span class="hljs-params">(<span class="hljs-type">int</span>[] nums)</span> &#123;<br>        <span class="hljs-type">Trie</span> <span class="hljs-variable">tree</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Trie</span>();<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> num : nums) tree.insert(num);<br><br>        <span class="hljs-type">int</span> <span class="hljs-variable">ans</span> <span class="hljs-operator">=</span> Integer.MIN_VALUE;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> num : nums) ans = Math.max(ans, num ^ tree.match(num));<br><br>        <span class="hljs-keyword">return</span> ans;<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Trie</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">boolean</span> isEnd;<br>    <span class="hljs-keyword">private</span> Trie[] children;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">Trie</span><span class="hljs-params">()</span> &#123;<br>        isEnd = <span class="hljs-literal">false</span>;<br>        children = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Trie</span>[<span class="hljs-number">2</span>];<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">insert</span><span class="hljs-params">(<span class="hljs-type">int</span> num)</span> &#123;<br>        <span class="hljs-type">int</span>[] bits = getBits(num);<br>        <span class="hljs-type">Trie</span> <span class="hljs-variable">node</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">this</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">31</span>; i++) &#123;<br>            <span class="hljs-type">int</span> <span class="hljs-variable">idx</span> <span class="hljs-operator">=</span> bits[i];<br>            <span class="hljs-keyword">if</span> (node.children[idx] == <span class="hljs-literal">null</span>) &#123;<br>                node.children[idx] = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Trie</span>();<br>            &#125;<br>            node = node.children[idx];<br>        &#125;<br>        node.isEnd = <span class="hljs-literal">true</span>;<br>    &#125;<br><br>    <span class="hljs-comment">// 获取与num能够取得最大异或值的另一个元素</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">match</span><span class="hljs-params">(<span class="hljs-type">int</span> num)</span> &#123;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">candidate</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span>[] bits = getBits(num);<br>        <span class="hljs-type">Trie</span> <span class="hljs-variable">node</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">this</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">31</span>; i++) &#123;<br>            <span class="hljs-type">int</span> <span class="hljs-variable">idxMatch</span> <span class="hljs-operator">=</span> bits[i] == <span class="hljs-number">0</span> ? <span class="hljs-number">1</span> : <span class="hljs-number">0</span>;<br>            <span class="hljs-keyword">if</span> (node.children[idxMatch] == <span class="hljs-literal">null</span>) &#123;<br>                node = node.children[bits[i]];<br>                candidate  = (candidate &lt;&lt; <span class="hljs-number">1</span>) + (bits[i]);<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                node = node.children[idxMatch];<br>                candidate = (candidate &lt;&lt; <span class="hljs-number">1</span>) + idxMatch;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> candidate;<br>    &#125;<br><br>    <span class="hljs-comment">// 获取数字的二进制表示</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span>[] getBits(<span class="hljs-type">int</span> num) &#123;<br>        <span class="hljs-type">int</span>[] bits = <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[<span class="hljs-number">31</span>];<br>        <span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">while</span> (i &lt; <span class="hljs-number">31</span>) &#123;<br>            bits[<span class="hljs-number">30</span> - i++] = (num &amp; <span class="hljs-number">1</span>);<br>            num &gt;&gt;= <span class="hljs-number">1</span>;<br>        &#125;<br>        <span class="hljs-keyword">return</span> bits;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/technowledge/" class="category-chain-item">technowledge</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Java/" class="print-no-link">#Java</a>
+      
+        <a href="/tags/%E9%AB%98%E7%BA%A7%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="print-no-link">#高级数据结构</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>树形结构系列——字典树（前缀树）</div>
+      <div>https://xizhenluo.github.io/2025/01/26/dictionaryTree/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Xizhen Luo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>January 26, 2025</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/01/27/bitOperation/" title="位运算技巧">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">位运算技巧</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/11/22/HowToGrowAnRBTFromNull/" title="从零开始种出一棵红黑树">
+                        <span class="hidden-mobile">从零开始种出一棵红黑树</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

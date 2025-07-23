@@ -8,8 +8,8 @@
 <head>
   <meta charset="UTF-8">
 
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/avatar.jpg">
-  <link rel="icon" href="/img/avatar.jpg">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/CitCup.png">
+  <link rel="icon" href="/img/GitCup.png">
   
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
@@ -28,7 +28,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://xizhenluo.github.io/img/cover/java_api.jpg">
 <meta property="article:published_time" content="2024-10-08T06:46:13.000Z">
-<meta property="article:modified_time" content="2024-11-08T15:15:00.239Z">
+<meta property="article:modified_time" content="2025-04-01T13:09:23.005Z">
 <meta property="article:author" content="Xizhen Luo">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary_large_image">
@@ -237,7 +237,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.1k words
+          2.8k words
         
       </span>
     
@@ -248,7 +248,7 @@
         
         
         
-          10 mins
+          24 mins
         
       </span>
     
@@ -448,6 +448,380 @@
 <li>获取键值对的键 <code>entry.getKey()</code></li>
 <li>获取键值对的值 <code>entry.getValue()</code></li>
 <li>修改键值对的值 <code>entry.setValue(val)</code></li>
+</ul>
+<h2 id="伪随机数生成器random">伪随机数生成器Random</h2>
+<ul>
+<li>生成一个随机整数 <code>rand.nextInt()</code></li>
+<li>在<code>[0, bound)</code>之间生成一个随机整数
+<code>rand.nextInt(bound)</code></li>
+<li>在<code>[0.0, 1.0)</code>之间生成一个随机浮点数
+<code>rand.nextDouble()</code></li>
+<li>随机生成一个布尔值 <code>rand.nextBoolean()</code></li>
+</ul>
+<h2 id="数学math">数学Math</h2>
+<ul>
+<li>圆周率 <code>Math.PI</code></li>
+<li>自然底数 <code>Math.E</code></li>
+<li>计算绝对值 <code>Math.abs(num)</code></li>
+<li>获取符号 <code>Math.signum(num)</code></li>
+<li>获取两个同类型数值中的最大值 <code>Math.max(a, b)</code></li>
+<li>获取两个同类型数值中的最小值 <code>Math.min(a, b)</code></li>
+<li>浮点数向下取整（结果为浮点数） <code>Math.floor(num)</code></li>
+<li>浮点数向上取整（结果为浮点数） <code>Math.ceil(num)</code></li>
+<li>浮点数四舍五入取整（结果为整数） <code>Math.round(num)</code></li>
+<li>浮点数四舍五入取整（结果为浮点数） <code>Math.rint(num)</code></li>
+<li>计算x的n次幂（结果为浮点数） <code>Math.pow(x, n)</code></li>
+<li>开平方（结果为浮点数） <code>Math.sqrt(x)</code></li>
+<li>开立方（结果为浮点数） <code>Math.cbrt(x)</code></li>
+<li>指数函数（结果为浮点数） <code>Math.exp(x)</code></li>
+<li>自然对数（结果为浮点数） <code>Math.log(x)</code></li>
+<li>常用对数（结果为浮点数） <code>Math.log10(x)</code></li>
+<li>三角函数（弧度制，结果为浮点数）
+<code>Math.sin(x)</code>，<code>Math.cos(x)</code>，<code>Math.tan(x)</code></li>
+<li>反三角函数（弧度制，结果为浮点数）
+<code>Math.asin(x)</code>，<code>Math.acos(x)</code>，<code>Math.atan(x)</code></li>
+<li>角度值转化为弧度值（结果为浮点数）
+<code>Math.toRadians(deg)</code></li>
+<li>弧度值转化为角度值（结果为浮点数）
+<code>Math.toDegrees(rad)</code></li>
+<li>生成<code>[0.0, 1.0)</code>之间的一个随机浮点数
+<code>Math.random()</code></li>
+</ul>
+<h2 id="位整数包装类integer">32位整数包装类Integer</h2>
+<table>
+
+<thead>
+<tr>
+<th style="text-align: left;">用途</th>
+<th style="text-align: left;">静态方法</th>
+<th style="text-align: center;">实例方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">10进制表示的字符串转换成基本类型整数</td>
+<td style="text-align: left;"><code>Integer.parseInt(numStr)</code></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td
+style="text-align: left;">任意进制表示的字符串转换成基本类型整数</td>
+<td
+style="text-align: left;"><code>Integer.parseInt(numStr, radix)</code></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">10进制表示的字符串转换成整数对象</td>
+<td style="text-align: left;"><code>Integer.valueOf(numStr)</code></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">任意进制表示的字符串转换成整数对象</td>
+<td
+style="text-align: left;"><code>Integer.valueOf(numStr, radix)</code></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">基本类型和包装类互相转换</td>
+<td
+style="text-align: left;"><code>Integer.valueOf(num)</code>（装箱）</td>
+<td style="text-align: center;"><code>num.intValue()</code>（拆箱）</td>
+</tr>
+<tr>
+<td style="text-align: left;">整数转化为2进制字符串（高位不补0）</td>
+<td
+style="text-align: left;"><code>Integer.toBinaryString(num)</code></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">整数转化为8进制字符串</td>
+<td
+style="text-align: left;"><code>Integer.toOctalString(num)</code></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">整数转化为16进制字符串</td>
+<td style="text-align: left;"><code>Integer.toHexString(num)</code></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">统计2进制表示中1的个数</td>
+<td style="text-align: left;"><code>Integer.bitCount(num)</code></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">整数转化为10进制表示的字符串</td>
+<td style="text-align: left;"><code>Integer.toString(num)</code></td>
+<td style="text-align: center;"><code>num.toString()</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">整数转化为任意进制表示的字符串</td>
+<td
+style="text-align: left;"><code>Integer.toString(num, radix)</code></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td
+style="text-align: left;">比较两个基本类型整数或者整数对象的大小</td>
+<td style="text-align: left;"><code>Integer.compare(a, b)</code></td>
+<td
+style="text-align: center;"><code>a.compareTo(b)</code>（实现了Comparable接口）</td>
+</tr>
+<tr>
+<td style="text-align: left;">比较两个整数对象地址相同</td>
+<td style="text-align: left;"></td>
+<td style="text-align: center;"><code>a == b</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">比较两个整数对象值相等</td>
+<td style="text-align: left;"></td>
+<td style="text-align: center;"><code>a.equals(b)</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="双精度浮点数包装类double">双精度浮点数包装类Double</h2>
+<table>
+
+<thead>
+<tr>
+<th style="text-align: left;">用途</th>
+<th style="text-align: left;">静态方法</th>
+<th style="text-align: center;">实例方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">字符串解析为基本类型浮点数</td>
+<td
+style="text-align: left;"><code>Double.parseDouble(numStr)</code></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">字符串解析为浮点数对象</td>
+<td style="text-align: left;"><code>Double.valueOf(numStr)</code></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">基本类型和包装类型互相转换</td>
+<td
+style="text-align: left;"><code>Double.valueOf(num)</code>（装箱）</td>
+<td
+style="text-align: center;"><code>num.doubleValue()</code>（拆箱）</td>
+</tr>
+<tr>
+<td style="text-align: left;">转换为字符串</td>
+<td style="text-align: left;"><code>Double.toString(num)</code></td>
+<td style="text-align: center;"><code>num.toString()</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">判断是否为NaN</td>
+<td style="text-align: left;"><code>Double.isNaN(num)</code></td>
+<td style="text-align: center;"><code>num.isNaN()</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">判断是否为正负无穷大</td>
+<td style="text-align: left;"><code>Double.isInfinite(num)</code></td>
+<td style="text-align: center;"><code>num.isInfinite()</code></td>
+</tr>
+<tr>
+<td
+style="text-align: left;">比较两个基本类型浮点数或浮点数对象的大小</td>
+<td style="text-align: left;"><code>Double.compare(a, b)</code></td>
+<td style="text-align: center;"><code>a.compareTo(b)</code>
+（实现了Comparable接口）</td>
+</tr>
+<tr>
+<td style="text-align: left;">比较两个浮点数对象值相等</td>
+<td style="text-align: left;"></td>
+<td style="text-align: center;"><code>a.equals(b)</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="布尔值包装类boolean">布尔值包装类Boolean</h2>
+<table>
+
+<thead>
+<tr>
+<th style="text-align: left;">用途</th>
+<th style="text-align: left;">静态方法</th>
+<th style="text-align: center;">实例方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">把字符串解析为基本布尔值</td>
+<td style="text-align: left;"><code>Boolean.parseBoolean(boolStr)</code>
+（大小写不敏感）</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">把字符串解析为布尔对象</td>
+<td style="text-align: left;"><code>Boolean.valueOf(boolStr)</code>
+（大小写不敏感）</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">基本类型装箱</td>
+<td style="text-align: left;"><code>Boolean.valueOf(flag)</code></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">包装类拆箱</td>
+<td
+style="text-align: left;"><code>Boolean.booleanValue(flag)</code></td>
+<td style="text-align: center;"><code>flag.booleanValue()</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">转化为字符串</td>
+<td style="text-align: left;"><code>Boolean.toString(flag)</code></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">比较两个布尔对象相等</td>
+<td style="text-align: left;"></td>
+<td style="text-align: center;"><code>flag1.equals(flag2)</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="字符包装类character">字符包装类Character</h2>
+<table>
+
+<thead>
+<tr>
+<th style="text-align: left;">用途</th>
+<th style="text-align: left;">静态方法</th>
+<th style="text-align: center;">实例方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">判断是否为字母</td>
+<td style="text-align: left;"><code>Character.isLetter(ch)</code></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">判断是否为数字</td>
+<td style="text-align: left;"><code>Character.isDigit(ch)</code></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">判断是否为字母或数字</td>
+<td
+style="text-align: left;"><code>Character.isLetterOrDigit(ch)</code></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">判断是否为空白字符</td>
+<td style="text-align: left;"><code>Character.isWhiteSpace(ch)</code>
+（注意：空白字符指的是空格<code></code>，换行符<code>\n</code>，水平制表符<code>\t</code>，回车符<code>\r</code>，垂直制表符<code>\u00B</code>，换页符<code>\f</code>这6个会移动光标并且在视觉上造成空白的控制字符）</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">判断是否为大写字母</td>
+<td
+style="text-align: left;"><code>Character.isUpperCase(ch)</code></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">判断是否为小写字母</td>
+<td
+style="text-align: left;"><code>Character.isLowerCase(ch)</code></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">转换为大写字母</td>
+<td
+style="text-align: left;"><code>Character.toUpperCase(ch)</code></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">转换为小写字母</td>
+<td
+style="text-align: left;"><code>Character.toLowerCase(ch)</code></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">转换为字符串</td>
+<td style="text-align: left;"><code>Character.toString(ch)</code></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td
+style="text-align: left;">比较两个基本类型字符或者字符对象的ASCII码大小</td>
+<td
+style="text-align: left;"><code>Character.compare(ch1, ch2)</code></td>
+<td style="text-align: center;"><code>ch1.compareTo(ch2)</code>
+（实现了Comparable接口）</td>
+</tr>
+<tr>
+<td style="text-align: left;">比较两个字符对象值相等</td>
+<td style="text-align: left;"></td>
+<td style="text-align: center;"><code>ch1.equals(ch2)</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="高精度浮点数bigdecimal">高精度浮点数BigDecimal</h2>
+<ul>
+<li>字符串转化为高精度浮点数 <code>new BigDecimal(numStr)</code></li>
+<li>浮点数转化为高精度浮点数 <code>BigDecimal.valueOf(num)</code></li>
+<li>两个高精度浮点数相加 <code>a.add(b)</code></li>
+<li>两个高精度浮点数相减 <code>a.subtract(b)</code></li>
+<li>两个高精度浮点数相乘 <code>a.multiply(b)</code></li>
+<li>两个高精度浮点数相除（会抛异常） <code>a.divide(b)</code></li>
+<li>两个高精度浮点数相除（指定精度和舍入方式）
+<code>a.divide(b, scale, RoundingMode.HALF_UP)</code></li>
+<li>按照小数位数四舍五入 <code>num.setScale(scale)</code></li>
+<li>按照指定舍入方式保留小数 <code>num.setScale(scale, mode)</code></li>
+<li>比较两个高精度浮点数的大小（不管小数位数）
+<code>a.compareTo(b)</code></li>
+<li>比较两个高精度浮点数的值相同（包括小数位数）
+<code>a.equals(b)</code></li>
+<li>获取两个高精度浮点数之间的较小/大值 <code>a.min(b)</code>
+<code>a.max(b)</code></li>
+</ul>
+<h2 id="输入scanner">输入Scanner</h2>
+<ul>
+<li>读取下一个以空格或换行符分隔的字符串 <code>sc.next()</code></li>
+<li>读取下一行 <code>sc.nextLine()</code></li>
+<li>读取下一个整数 <code>sc.nextInt()</code></li>
+<li>读取下一个浮点数 <code>sc.nextDouble()</code></li>
+<li>读取下一个布尔值 <code>sc.nextBoolean()</code></li>
+<li>判断是否还有后续输入 <code>sc.hasNext()</code></li>
+<li>判断是否还有下一行 <code>sc.hasNextLine()</code></li>
+<li>判断下一个输入是否为整数 <code>sc.hasNextInt()</code></li>
+<li>判断下一个输入是否为浮点数 <code>sc.hasNextDouble()</code></li>
+<li>判断下一个输入是否为布尔值 <code>sc.hasNextBoolean()</code></li>
+</ul>
+<h2 id="输出printstream">输出PrintStream</h2>
+<ul>
+<li>不换行输出 <code>out.print()</code></li>
+<li>换行输出 <code>out.println()</code></li>
+<li>格式化输出 <code>out.printf(formatStr, args)</code></li>
+</ul>
+<h2 id="迭代器iterator">迭代器Iterator</h2>
+<ul>
+<li>生成Java集合的迭代器 <code>collection.iterator()</code>
+（是一个<code>Iterator&lt;T&gt;</code>对象，其中T是collection的元素泛型）</li>
+<li>判断是否还有下一个元素 <code>iter.hasNext()</code></li>
+<li>获取下一个元素 <code>iter.next()</code></li>
+</ul>
+<h2 id="流stream">流Stream</h2>
+<ul>
+<li>从Java集合中获取流 <code>collection.stream()</code>
+（生成的是<code>Stream&lt;T&gt;</code>对象，其中T是集合元素的泛型）</li>
+<li>筛选符合条件的元素 <code>filter()</code></li>
+<li>把元素映射为另外的对象 <code>map()</code></li>
+<li>扁平化嵌套结构 <code>flatMap()</code></li>
+<li>排序 <code>sorted()</code></li>
+<li>去重 <code>distinct()</code></li>
+<li>截断 <code>limit(n)</code></li>
+<li>跳过元素 <code>skip(n)</code></li>
+<li>收集结果 <code>collect()</code></li>
+<li>遍历元素 <code>forEach()</code></li>
+<li>计数 <code>count()</code></li>
+<li>聚合 <code>reduce()</code></li>
+<li>查找第一个/任意一个满足要求的元素 <code>findFirst()</code>，
+<code>findAny()</code></li>
 </ul>
 
                 
